@@ -221,6 +221,7 @@
           <!-- ======== PATIENT FORM ======== -->
           <div class="form-panel is-active" id="panel-patient" role="tabpanel" aria-labelledby="tab-patient">
             <form id="patientForm" action="https://forms.un-static.com/forms/3f4b99822d9315a71e1da563fddd7c45e65bf776" method="POST" novalidate>
+              <input type="hidden" name="role" value="patient" />
               <div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div>
               <p class="step-indicator">Step <span class="current-step">1</span> of <span class="total-steps">3</span></p>
 
@@ -363,17 +364,12 @@
               </div>
             </form>
 
-            <div class="form-success" hidden>
-              <div class="success-icon">✓</div>
-              <h3>You're on the list!</h3>
-              <p>Thank you for joining the Lumora Health waitlist. We'll email you as soon as early access opens, and your answers will directly shape what we build.</p>
-              <button type="button" class="btn btn-outline btn-reset">Submit another response</button>
-            </div>
           </div>
 
           <!-- ======== DOCTOR FORM ======== -->
           <div class="form-panel" id="panel-doctor" role="tabpanel" aria-labelledby="tab-doctor" hidden>
             <form id="doctorForm" action="https://forms.un-static.com/forms/3f4b99822d9315a71e1da563fddd7c45e65bf776" method="POST" novalidate>
+              <input type="hidden" name="role" value="doctor" />
               <div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div>
               <p class="step-indicator">Step <span class="current-step">1</span> of <span class="total-steps">3</span></p>
 
@@ -509,12 +505,6 @@
               </div>
             </form>
 
-            <div class="form-success" hidden>
-              <div class="success-icon">✓</div>
-              <h3>Welcome aboard, Doctor!</h3>
-              <p>Thank you for pre-registering with Lumora Health. Our team will reach out about verification and onboarding before launch.</p>
-              <button type="button" class="btn btn-outline btn-reset">Submit another response</button>
-            </div>
           </div>
         </div>
       </div>

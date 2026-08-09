@@ -8,7 +8,7 @@ Africans in the diaspora with licensed African doctors back home for on-demand v
 - Modern, responsive landing page (hero, how it works, value props, doctor recruitment, FAQ)
 - Tabbed waitlist questionnaires for **patients** and **doctors**
 - Multi-step forms with progress bar, per-step validation, and success states
-- Submissions POST to an [Un-static Forms](https://un-static.com) endpoint, with a `localStorage` backup
+- Submissions POST to an [Un-static Forms](https://un-static.com) endpoint
 
 ## Tech
 
@@ -29,4 +29,3 @@ python -m http.server 8000
 Submissions are POSTed to the Un-static Forms endpoint configured as `FORM_ENDPOINT`
 in `script.js` (also set as the `action` attribute on both forms). Each submission
 includes a `role` field (`patient` or `doctor`) plus all questionnaire answers.
-A backup copy is also kept in `localStorage` under the key `lumora-waitlist`.

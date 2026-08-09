@@ -90,8 +90,6 @@
     const btnBack = form.querySelector(".btn-back");
     const btnNext = form.querySelector(".btn-next");
     const btnSubmit = form.querySelector(".btn-submit");
-    const panel = form.closest(".form-panel");
-    const successBox = panel.querySelector(".form-success");
 
     let current = 0;
     totalStepsEl.textContent = steps.length;
@@ -175,98 +173,17 @@
       render();
     });
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!validateStep(steps[current])) return;
-
-      const role = form.id === "patientForm" ? "patient" : "doctor";
-      const data = collectFormData(form);
-
-      const originalLabel = btnSubmit.textContent;
+    // Validate the last step, then let the browser POST natively to the
+    // form's action URL, which navigates to the endpoint's confirmation page.
+    form.addEventListener("submit", (e) => {
+      if (!validateStep(steps[current])) {
+        e.preventDefault();
+        return;
+      }
       btnSubmit.disabled = true;
       btnSubmit.textContent = "Submitting…";
-
-      await submitToEndpoint(form, role);
-      saveSubmission(role, data);
-
-      btnSubmit.disabled = false;
-      btnSubmit.textContent = originalLabel;
-      form.hidden = true;
-      successBox.hidden = false;
-      successBox.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-
-    // Reset button inside the success box
-    successBox.querySelector(".btn-reset").addEventListener("click", () => {
-      form.reset();
-      current = 0;
-      render();
-      form.hidden = false;
-      successBox.hidden = true;
-      form.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     render();
-  }
-
-  function collectFormData(form) {
-    const data = { submittedAt: new Date().toISOString() };
-    const formData = new FormData(form);
-
-    for (const [key, value] of formData.entries()) {
-      if (key in data) {
-        // Multiple values (checkbox groups) become arrays
-        data[key] = [].concat(data[key], value);
-      } else {
-        data[key] = value;
-      }
-    }
-    return data;
-  }
-
-  /* ---------- Submission ---------- */
-  const FORM_ENDPOINT = "https://forms.un-static.com/forms/3f4b99822d9315a71e1da563fddd7c45e65bf776";
-
-  /*
-   * POSTs the form to the Un-static Forms endpoint as URL-encoded data.
-   * If the endpoint doesn't allow cross-origin reads, retry opaquely with
-   * no-cors: the submission is still delivered, we just can't inspect the
-   * response. Errors never block the user; a localStorage backup is kept.
-   */
-  async function submitToEndpoint(form, role) {
-    const body = new URLSearchParams(new FormData(form));
-    body.append("role", role);
-
-    try {
-      await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body,
-      });
-    } catch (_) {
-      try {
-        await fetch(FORM_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body,
-          mode: "no-cors",
-        });
-      } catch (_) {
-        // Offline or endpoint unreachable; the localStorage backup still captures the entry.
-      }
-    }
-  }
-
-  // Local backup of every submission, kept alongside the endpoint POST.
-  function saveSubmission(role, data) {
-    const key = "lumora-waitlist";
-    let existing = [];
-    try {
-      existing = JSON.parse(localStorage.getItem(key)) || [];
-    } catch (_) {
-      existing = [];
-    }
-    existing.push({ role, ...data });
-    localStorage.setItem(key, JSON.stringify(existing));
   }
 })();

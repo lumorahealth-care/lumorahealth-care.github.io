@@ -49,10 +49,6 @@
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
               X / Twitter
             </a>
-            <a class="share-btn share-facebook" id="shareFacebook" href="#" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 5.02 3.66 9.18 8.44 9.93v-7.03H7.9v-2.9h2.4V9.84c0-2.37 1.4-3.69 3.56-3.69 1.03 0 2.11.19 2.11.19v2.33h-1.19c-1.17 0-1.54.73-1.54 1.48v1.78h2.62l-.42 2.9h-2.2V22c4.78-.75 8.44-4.91 8.44-9.93z"/></svg>
-              Facebook
-            </a>
             <button type="button" class="share-btn share-instagram" id="shareInstagram">
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.8c-3.15 0-3.52.01-4.76.07-2.25.1-3.29 1.17-3.39 3.39-.06 1.24-.07 1.61-.07 4.76s.01 3.52.07 4.76c.1 2.21 1.14 3.29 3.39 3.39 1.24.06 1.61.07 4.76.07s3.52-.01 4.76-.07c2.25-.1 3.29-1.18 3.39-3.39.06-1.24.07-1.61.07-4.76s-.01-3.52-.07-4.76c-.1-2.22-1.14-3.29-3.39-3.39-1.24-.06-1.61-.07-4.76-.07zm0 3.06a5.16 5.16 0 1 1 0 10.32 5.16 5.16 0 0 1 0-10.32zm0 8.52a3.36 3.36 0 1 0 0-6.72 3.36 3.36 0 0 0 0 6.72zm5.34-9.78a1.2 1.2 0 1 1 0 2.41 1.2 1.2 0 0 1 0-2.41z"/></svg>
               Instagram
@@ -92,7 +88,12 @@
     const siteUrl = window.location.origin + "/index.html";
     const shareText =
       "I just signed up for Lumora Health! Connecting Africans in the diaspora with trusted doctors back home. Join the waitlist:";
+    const tweetText =
+      "I just signed up for @lumorahealth! Connecting Africans in the diaspora with trusted doctors back home. Join the waitlist:";
+    const instagramText =
+      "I just signed up for @lumorahealthcare! Connecting Africans in the diaspora with trusted doctors back home. Join the waitlist:";
     const shareMessage = shareText + " " + siteUrl;
+    const instagramMessage = instagramText + " " + siteUrl;
 
     const feedback = document.getElementById("shareFeedback");
 
@@ -106,12 +107,8 @@
     }
 
     document.getElementById("shareX").href =
-      "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareText) +
+      "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweetText) +
       "&url=" + encodeURIComponent(siteUrl);
-
-    document.getElementById("shareFacebook").href =
-      "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(siteUrl) +
-      "&quote=" + encodeURIComponent(shareText);
 
     document.getElementById("shareWhatsApp").href =
       "https://wa.me/?text=" + encodeURIComponent(shareMessage);
@@ -128,7 +125,7 @@
     // Instagram has no web share intent for posts — copy the caption, then open Instagram.
     document.getElementById("shareInstagram").addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(shareMessage);
+        await navigator.clipboard.writeText(instagramMessage);
         showFeedback("Caption copied. Paste it into your Instagram post or story.");
       } catch (_) {
         showFeedback("Copy this message, then open Instagram to paste it.");

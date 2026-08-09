@@ -860,7 +860,6 @@ a { color: var(--green-700); }
 }
 
 .share-x:hover { border-color: #111; background: #f4f4f4; color: #111; }
-.share-facebook:hover { border-color: #1877f2; background: #eef5ff; color: #1877f2; }
 .share-instagram:hover { border-color: #c13584; background: #fff0f7; color: #c13584; }
 .share-whatsapp:hover { border-color: #25d366; background: #eefbf3; color: #128c7e; }
 

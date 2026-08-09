@@ -26,6 +26,12 @@ python -m http.server 8000
 
 ## Form backend
 
-Submissions are POSTed to the Un-static Forms endpoint configured as `FORM_ENDPOINT`
-in `script.js` (also set as the `action` attribute on both forms). Each submission
-includes a `role` field (`patient` or `doctor`) plus all questionnaire answers.
+Submissions are POSTed to the Un-static Forms endpoint set as the `action` on both
+forms. Each submission includes a `role` field (`patient` or `doctor`) plus all
+questionnaire answers.
+
+After a successful submission, visitors should land on `success.html`. Set this as
+the **Success Destination** in your Un-static form settings:
+
+- Local: `http://localhost:8642/success.html`
+- Live: `https://lumorahealth-care.github.io/success.html`

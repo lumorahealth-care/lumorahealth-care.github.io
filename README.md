@@ -35,3 +35,15 @@ the **Success Destination** in your Un-static form settings:
 
 - Local: `http://localhost:8642/success.html`
 - Live: `https://lumorahealth-care.github.io/success.html`
+
+### Honeypot (spam protection)
+
+Both forms include a hidden honeypot field named `website`. In your Un-static form
+settings, set **Honeypot Field** to:
+
+```
+website
+```
+
+Any submission that fills that field is marked as spam. Leave the Un-static setting
+empty only if you want to disable honeypot protection.

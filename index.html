@@ -222,6 +222,11 @@
           <div class="form-panel is-active" id="panel-patient" role="tabpanel" aria-labelledby="tab-patient">
             <form id="patientForm" action="https://forms.un-static.com/forms/3f4b99822d9315a71e1da563fddd7c45e65bf776" method="POST" novalidate>
               <input type="hidden" name="role" value="patient" />
+              <!-- Honeypot: leave empty. Set the same field name in Un-static spam settings. -->
+              <div class="hp-field" aria-hidden="true">
+                <label for="p-website">Website</label>
+                <input type="text" id="p-website" name="website" tabindex="-1" autocomplete="off" />
+              </div>
               <div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div>
               <p class="step-indicator">Step <span class="current-step">1</span> of <span class="total-steps">3</span></p>
 
@@ -370,6 +375,11 @@
           <div class="form-panel" id="panel-doctor" role="tabpanel" aria-labelledby="tab-doctor" hidden>
             <form id="doctorForm" action="https://forms.un-static.com/forms/3f4b99822d9315a71e1da563fddd7c45e65bf776" method="POST" novalidate>
               <input type="hidden" name="role" value="doctor" />
+              <!-- Honeypot: leave empty. Set the same field name in Un-static spam settings. -->
+              <div class="hp-field" aria-hidden="true">
+                <label for="d-website">Website</label>
+                <input type="text" id="d-website" name="website" tabindex="-1" autocomplete="off" />
+              </div>
               <div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div>
               <p class="step-indicator">Step <span class="current-step">1</span> of <span class="total-steps">3</span></p>
 

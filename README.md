@@ -8,7 +8,7 @@ Africans in the diaspora with licensed African doctors back home for on-demand v
 - Modern, responsive landing page (hero, how it works, value props, doctor recruitment, FAQ)
 - Tabbed waitlist questionnaires for **patients** and **doctors**
 - Multi-step forms with progress bar, per-step validation, and success states
-- Submissions saved to `localStorage` (see `script.js` for the backend hook point)
+- Submissions POST to an [Un-static Forms](https://un-static.com) endpoint, with a `localStorage` backup
 
 ## Tech
 
@@ -24,8 +24,9 @@ npx serve .
 python -m http.server 8000
 ```
 
-## Connecting a real backend
+## Form backend
 
-Form submissions currently persist to `localStorage` under the key `lumora-waitlist`.
-To collect responses for real, replace the `saveSubmission` function in `script.js`
-with a `fetch()` POST to your endpoint (Formspree, Google Apps Script, Airtable, or your own API).
+Submissions are POSTed to the Un-static Forms endpoint configured as `FORM_ENDPOINT`
+in `script.js` (also set as the `action` attribute on both forms). Each submission
+includes a `role` field (`patient` or `doctor`) plus all questionnaire answers.
+A backup copy is also kept in `localStorage` under the key `lumora-waitlist`.

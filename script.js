@@ -175,13 +175,22 @@
       render();
     });
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!validateStep(steps[current])) return;
 
+      const role = form.id === "patientForm" ? "patient" : "doctor";
       const data = collectFormData(form);
-      saveSubmission(form.id === "patientForm" ? "patient" : "doctor", data);
 
+      const originalLabel = btnSubmit.textContent;
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = "Submitting…";
+
+      await submitToEndpoint(form, role);
+      saveSubmission(role, data);
+
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = originalLabel;
       form.hidden = true;
       successBox.hidden = false;
       successBox.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -215,17 +224,40 @@
     return data;
   }
 
+  /* ---------- Submission ---------- */
+  const FORM_ENDPOINT = "https://forms.un-static.com/forms/3f4b99822d9315a71e1da563fddd7c45e65bf776";
+
   /*
-   * Submissions are stored in localStorage for now. To hook this up to a
-   * real backend, replace saveSubmission with a fetch() POST to your
-   * endpoint (e.g. Formspree, Google Sheets via Apps Script, or your API):
-   *
-   *   fetch("https://your-endpoint.example/waitlist", {
-   *     method: "POST",
-   *     headers: { "Content-Type": "application/json" },
-   *     body: JSON.stringify({ role, ...data }),
-   *   });
+   * POSTs the form to the Un-static Forms endpoint as URL-encoded data.
+   * If the endpoint doesn't allow cross-origin reads, retry opaquely with
+   * no-cors: the submission is still delivered, we just can't inspect the
+   * response. Errors never block the user; a localStorage backup is kept.
    */
+  async function submitToEndpoint(form, role) {
+    const body = new URLSearchParams(new FormData(form));
+    body.append("role", role);
+
+    try {
+      await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+    } catch (_) {
+      try {
+        await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body,
+          mode: "no-cors",
+        });
+      } catch (_) {
+        // Offline or endpoint unreachable; the localStorage backup still captures the entry.
+      }
+    }
+  }
+
+  // Local backup of every submission, kept alongside the endpoint POST.
   function saveSubmission(role, data) {
     const key = "lumora-waitlist";
     let existing = [];

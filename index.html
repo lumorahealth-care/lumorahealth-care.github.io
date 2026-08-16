@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='%23106b4f'/><circle cx='50' cy='38' r='13' fill='%23f4b942'/></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='%23252525'/><circle cx='50' cy='38' r='13' fill='%23E5B587'/></svg>" />
 </head>
 <body>
 
@@ -401,7 +401,37 @@
                 <div class="field-row">
                   <div class="field">
                     <label for="d-phone">Phone / WhatsApp number</label>
-                    <input type="tel" id="d-phone" name="phone" autocomplete="tel" placeholder="+234 801 234 5678" />
+                    <div class="phone-split">
+                      <select id="d-phone-code" name="phoneCountryCode" aria-label="Phone country code">
+                        <option value="+234">🇳🇬 +234</option>
+                        <option value="+233">🇬🇭 +233</option>
+                        <option value="+254">🇰🇪 +254</option>
+                        <option value="+251">🇪🇹 +251</option>
+                        <option value="+256">🇺🇬 +256</option>
+                        <option value="+255">🇹🇿 +255</option>
+                        <option value="+237">🇨🇲 +237</option>
+                        <option value="+221">🇸🇳 +221</option>
+                        <option value="+250">🇷🇼 +250</option>
+                        <option value="+27">🇿🇦 +27</option>
+                        <option value="+225">🇨🇮 +225</option>
+                        <option value="+20">🇪🇬 +20</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+1">🇨🇦/🇺🇸 +1</option>
+                        <option value="+49">🇩🇪 +49</option>
+                        <option value="+33">🇫🇷 +33</option>
+                        <option value="+31">🇳🇱 +31</option>
+                        <option value="+353">🇮🇪 +353</option>
+                        <option value="+61">🇦🇺 +61</option>
+                        <option value="+971">🇦🇪 +971</option>
+                        <option value="other">Other code…</option>
+                      </select>
+                      <input type="tel" id="d-phone" name="phoneNumber" autocomplete="tel-national" inputmode="tel" placeholder="801 234 5678" />
+                    </div>
+                    <div class="field field-other" id="d-phone-other-wrap" hidden>
+                      <label for="d-phone-other">Other country code</label>
+                      <input type="text" id="d-phone-other" name="phoneCountryCodeOther" placeholder="e.g. +234" />
+                    </div>
+                    <p class="field-hint">Include any African or international dialling code.</p>
                   </div>
                   <div class="field">
                     <label for="d-country">Country of practice <span class="req">*</span></label>
@@ -461,12 +491,25 @@
                     <p class="field-error"></p>
                   </div>
                 </div>
-                <div class="field">
-                  <label for="d-license">Medical licence number &amp; issuing council <span class="req">*</span></label>
-                  <input type="text" id="d-license" name="licence" required placeholder="e.g. MDCN 12345 (Nigeria)" />
-                  <p class="field-hint">We verify every doctor before they can consult on Lumora.</p>
+                <div class="field-row">
+                  <div class="field">
+                    <span class="group-label">Issuing medical council / board</span>
+                    <p class="licence-council-display" id="d-licence-council-display">Select a country of practice first</p>
+                    <input type="hidden" id="d-licence-council" name="licenceCouncil" value="" />
+                    <p class="field-hint" id="d-licence-council-hint">This is set automatically from your country of practice.</p>
+                  </div>
+                  <div class="field">
+                    <label for="d-license">Licence / registration number <span class="req">*</span></label>
+                    <input type="text" id="d-license" name="licenceNumber" required placeholder="e.g. 12345" />
+                    <p class="field-error"></p>
+                  </div>
+                </div>
+                <div class="field field-other" id="d-licence-other-wrap" hidden>
+                  <label for="d-licence-other">Name of issuing council / board <span class="req">*</span></label>
+                  <input type="text" id="d-licence-other" name="licenceCouncilOther" placeholder="e.g. Medical &amp; Dental Council of your country" />
                   <p class="field-error"></p>
                 </div>
+                <p class="field-hint">We verify every doctor against their national medical council before they can consult on Lumora.</p>
                 <div class="field">
                   <label for="d-languages">Languages you consult in <span class="req">*</span></label>
                   <input type="text" id="d-languages" name="languages" required placeholder="e.g. English, Hausa, French" />

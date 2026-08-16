@@ -186,4 +186,123 @@
 
     render();
   }
+
+  /* ---------- Doctor form: country code & licence from country ---------- */
+  const phoneCode = document.getElementById("d-phone-code");
+  const phoneOtherWrap = document.getElementById("d-phone-other-wrap");
+  const phoneOther = document.getElementById("d-phone-other");
+  const licenceCouncil = document.getElementById("d-licence-council");
+  const licenceCouncilDisplay = document.getElementById("d-licence-council-display");
+  const licenceOtherWrap = document.getElementById("d-licence-other-wrap");
+  const licenceOther = document.getElementById("d-licence-other");
+  const practiceCountry = document.getElementById("d-country");
+
+  const practiceToDialCode = {
+    Nigeria: "+234",
+    Ghana: "+233",
+    Kenya: "+254",
+    Ethiopia: "+251",
+    Uganda: "+256",
+    Tanzania: "+255",
+    Cameroon: "+237",
+    Senegal: "+221",
+    Rwanda: "+250",
+    "South Africa": "+27",
+  };
+
+  const practiceToLicenceCouncil = {
+    Nigeria: "MDCN (Nigeria)",
+    Ghana: "MDC (Ghana)",
+    Kenya: "KMPDC (Kenya)",
+    Ethiopia: "FMHACA / EMA (Ethiopia)",
+    Uganda: "UMDPC (Uganda)",
+    Tanzania: "Medical Council (Tanzania)",
+    Cameroon: "Medical Council (Cameroon)",
+    Senegal: "Ordre National des Médecins (Senegal)",
+    Rwanda: "RHPC (Rwanda)",
+    "South Africa": "HPCSA (South Africa)",
+  };
+
+  function toggleOtherField(selectEl, wrapEl, inputEl, makeRequired) {
+    if (!selectEl || !wrapEl || !inputEl) return;
+    const show = selectEl.value === "other";
+    wrapEl.hidden = !show;
+    if (makeRequired) {
+      inputEl.required = show;
+      if (!show) {
+        inputEl.value = "";
+        const field = inputEl.closest(".field");
+        if (field) field.classList.remove("has-error");
+      }
+    } else if (!show) {
+      inputEl.value = "";
+    }
+  }
+
+  function syncLicenceCouncilFromCountry() {
+    if (!practiceCountry || !licenceCouncil || !licenceCouncilDisplay) return;
+
+    const country = practiceCountry.value;
+    const mapped = practiceToLicenceCouncil[country];
+
+    if (!country) {
+      licenceCouncil.value = "";
+      licenceCouncil.required = false;
+      licenceCouncilDisplay.textContent = "Select a country of practice first";
+      licenceCouncilDisplay.classList.add("is-placeholder");
+      if (licenceOtherWrap && licenceOther) {
+        licenceOtherWrap.hidden = true;
+        licenceOther.required = false;
+        licenceOther.value = "";
+      }
+      return;
+    }
+
+    if (country === "other" || !mapped) {
+      licenceCouncil.value = licenceOther ? licenceOther.value.trim() : "";
+      licenceCouncil.required = false;
+      licenceCouncilDisplay.textContent = "Enter your issuing council below";
+      licenceCouncilDisplay.classList.add("is-placeholder");
+      if (licenceOtherWrap && licenceOther) {
+        licenceOtherWrap.hidden = false;
+        licenceOther.required = true;
+      }
+      return;
+    }
+
+    licenceCouncil.value = mapped;
+    licenceCouncil.required = true;
+    licenceCouncilDisplay.textContent = mapped;
+    licenceCouncilDisplay.classList.remove("is-placeholder");
+    if (licenceOtherWrap && licenceOther) {
+      licenceOtherWrap.hidden = true;
+      licenceOther.required = false;
+      licenceOther.value = "";
+    }
+  }
+
+  if (phoneCode) {
+    phoneCode.addEventListener("change", () => {
+      toggleOtherField(phoneCode, phoneOtherWrap, phoneOther, false);
+    });
+  }
+
+  if (licenceOther && licenceCouncil) {
+    licenceOther.addEventListener("input", () => {
+      if (practiceCountry && practiceCountry.value === "other") {
+        licenceCouncil.value = licenceOther.value.trim();
+      }
+    });
+  }
+
+  if (practiceCountry) {
+    practiceCountry.addEventListener("change", () => {
+      const code = practiceToDialCode[practiceCountry.value];
+      if (code && phoneCode && phoneCode.value !== "other") {
+        phoneCode.value = code;
+      }
+      syncLicenceCouncilFromCountry();
+    });
+    syncLicenceCouncilFromCountry();
+  }
 })();

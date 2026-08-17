@@ -185,7 +185,7 @@ a { color: var(--green-700); }
 }
 
 .brand-logo-footer {
-  height: 8.5rem;
+  height: 5.5rem;
   width: auto;
   object-fit: contain;
   object-position: left center;
@@ -234,6 +234,7 @@ a { color: var(--green-700); }
 
 /* ---------- Hero ---------- */
 .hero {
+  position: relative;
   padding: 4.5rem 0 5rem;
   background:
     radial-gradient(60rem 30rem at 110% -10%, rgba(229, 181, 135, 0.28), transparent 60%),
@@ -242,7 +243,56 @@ a { color: var(--green-700); }
   overflow: hidden;
 }
 
+
+.hero-geo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.wave-layer {
+  position: absolute;
+  left: -10%;
+  width: 220%;
+  height: 42%;
+  bottom: 0;
+}
+
+.wave-layer path { fill: currentColor; }
+
+.wave-layer-1 {
+  bottom: -6%;
+  color: rgba(229, 181, 135, 0.22);
+  animation: wave-flow 16s ease-in-out infinite;
+}
+
+.wave-layer-2 {
+  bottom: -2%;
+  height: 36%;
+  color: rgba(233, 221, 202, 0.4);
+  animation: wave-flow 12s ease-in-out 0.6s infinite reverse;
+}
+
+.wave-layer-3 {
+  bottom: -10%;
+  height: 46%;
+  color: rgba(37, 37, 37, 0.05);
+  animation: wave-flow 20s ease-in-out 1.2s infinite;
+}
+
+@keyframes wave-flow {
+  0% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(-6%) translateY(-10px); }
+  50% { transform: translateX(-12%) translateY(6px); }
+  75% { transform: translateX(-6%) translateY(-8px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
 .hero-inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 3.5rem;
@@ -1041,26 +1091,22 @@ a { color: var(--green-700); }
 .footer-inner {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 2rem;
 }
 
 .footer-brand {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.35rem;
+  align-items: center;
 }
 
-.footer-brand p {
-  font-size: 0.88rem;
-  color: var(--ink-faint);
-  margin: 0;
-  max-width: 20rem;
+.footer-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
-
-.footer-nav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
 
 .footer-nav a {
   text-decoration: none;
@@ -1108,7 +1154,7 @@ a { color: var(--green-700); }
   }
 
   .brand-logo-footer {
-    height: 7rem;
+    height: 4.75rem;
   }
 
   .features-grid { grid-template-columns: 1fr; }
@@ -1120,4 +1166,8 @@ a { color: var(--green-700); }
   .hero { padding-top: 3rem; }
   .hero-proof { gap: 1.5rem; }
   .section { padding: 4rem 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-geo .wave-layer { animation: none !important; }
 }

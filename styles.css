@@ -3,12 +3,16 @@
    ============================================================ */
 
 :root {
-  /* Theme: #E5B587 accent · #252525 ink · #E9DDCA cream */
+  /* Brand system from Logo design style sheet */
+  --warm-sand: #E9DDCA;
+  --white: #FFFFFF;
+  --gold-sand: #E5B587;
+  --deep-charcoal: #252525;
   --green-900: #252525;
   --green-800: #2f2f2f;
   --green-700: #252525;
   --green-600: #3d3d3d;
-  --green-100: #f7efe6;
+  --green-100: #f3ebe0;
   --green-50: #faf6f1;
   --gold: #E5B587;
   --gold-dark: #d4a06f;
@@ -24,8 +28,8 @@
   --shadow-sm: 0 1px 3px rgba(37, 37, 37, 0.08);
   --shadow-md: 0 8px 30px rgba(37, 37, 37, 0.1);
   --shadow-lg: 0 20px 60px rgba(37, 37, 37, 0.14);
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Chillax", "General Sans", system-ui, sans-serif;
+  --font-body: "General Sans", system-ui, -apple-system, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -83,7 +87,7 @@ a { color: var(--green-700); }
 }
 
 .section { padding: 5.5rem 0; }
-.section-tinted { background: var(--green-50); }
+.section-tinted { background: color-mix(in srgb, var(--warm-sand) 55%, white); }
 
 .section-head { text-align: center; max-width: 640px; margin: 0 auto 3rem; }
 .section-sub { color: var(--ink-soft); font-size: 1.05rem; }
@@ -143,7 +147,7 @@ a { color: var(--green-700); }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(251, 250, 247, 0.92);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
@@ -159,11 +163,33 @@ a { color: var(--green-700); }
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  flex-shrink: 0;
   text-decoration: none;
+  line-height: 0;
+  overflow: visible;
 }
 
-.brand-mark { display: grid; place-items: center; }
+.brand-logo {
+  display: block;
+  height: auto;
+  width: auto;
+  max-width: none;
+  overflow: visible;
+}
+
+.brand-logo-header {
+  height: 4.25rem;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.brand-logo-footer {
+  height: 8.5rem;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+}
 
 .brand-name {
   font-family: var(--font-display);
@@ -1020,10 +1046,17 @@ a { color: var(--green-700); }
   gap: 2rem;
 }
 
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
 .footer-brand p {
   font-size: 0.88rem;
   color: var(--ink-faint);
-  margin: 0.5rem 0 0;
+  margin: 0;
   max-width: 20rem;
 }
 
@@ -1069,6 +1102,14 @@ a { color: var(--green-700); }
   .site-nav a { padding: 0.95rem 1.5rem; border-top: 1px solid var(--line); }
 
   .nav-toggle { display: flex; }
+
+  .brand-logo-header {
+    height: 3.5rem;
+  }
+
+  .brand-logo-footer {
+    height: 7rem;
+  }
 
   .features-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; gap: 0; }

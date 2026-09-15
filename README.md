@@ -34,7 +34,9 @@ After a successful submission, visitors should land on `success.html`. Set this 
 the **Success Destination** in your Un-static form settings:
 
 - Local: `http://localhost:8642/success.html`
-- Live: `https://lumorahealth-care.github.io/success.html`
+- Live: `https://lumorahealth.care/success.html`
+
+The waitlist lives at `https://lumorahealth.care/waitlist` (and `https://lumorahealth.care/#waitlist` on the homepage).
 
 ### Honeypot (spam protection)
 

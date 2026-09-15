@@ -79,6 +79,11 @@
     link.addEventListener("click", () => selectTab(link.dataset.selectTab));
   });
 
+  const requestedTab = new URLSearchParams(window.location.search).get("tab");
+  if (requestedTab && panels[requestedTab]) {
+    selectTab(requestedTab);
+  }
+
   /* ---------- Multi-step forms ---------- */
   document.querySelectorAll("#patientForm, #doctorForm").forEach(initMultiStepForm);
 

@@ -567,6 +567,11 @@ a { color: var(--green-700); }
     var(--green-50);
 }
 
+.waitlist-page .section-waitlist {
+  min-height: calc(100vh - 10rem);
+  padding-top: 4.5rem;
+}
+
 .waitlist-card {
   max-width: 780px;
   margin: 0 auto;

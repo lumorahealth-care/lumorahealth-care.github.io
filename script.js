@@ -24,7 +24,10 @@
   /* ---------- Footer year ---------- */
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  /* ---------- Animated counters ---------- */
+  /* ---------- Animated counters ----------
+     The hero stats row (.hero-proof) is hidden in index.html while the counts
+     are still zero. Remove that hidden attribute to show the row; these
+     counters will animate again with no other change here. */
   const counters = document.querySelectorAll("[data-counter]");
   const counterObserver = new IntersectionObserver(
     (entries) => {

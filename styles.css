@@ -311,12 +311,20 @@ a { color: var(--green-700); }
   margin-bottom: 1.75rem;
 }
 
-.hero-cta { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-bottom: 2.5rem; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 0.85rem; }
 
 .hero-proof {
   display: flex;
   gap: 2.25rem;
   flex-wrap: wrap;
+  margin-top: 2.5rem;
+}
+
+/* display:flex above would override the hidden attribute and leave the row on screen.
+   Remove hidden from .hero-proof in index.html to show the stats again; the top margin
+   only applies while the row is visible, so hiding it does not leave a gap. */
+.hero-proof[hidden] {
+  display: none !important;
 }
 
 .proof-item strong {

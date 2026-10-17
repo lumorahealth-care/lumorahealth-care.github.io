@@ -5,29 +5,131 @@
 (function () {
   "use strict";
 
+  /* ============================================================
+     CONFIG: Google Analytics 4 measurement ID
+     Paste the real ID from GA4 Admin → Data streams here.
+     This is the only place the ID is set.
+     While it is still the placeholder, gtag.js is not loaded
+     and no events are sent.
+     ============================================================ */
+  const GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+
+  function gaIsConfigured() {
+    return /^G-[A-Z0-9]+$/.test(GA_MEASUREMENT_ID) && GA_MEASUREMENT_ID !== "G-XXXXXXXXXX";
+  }
+
+  if (gaIsConfigured()) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", GA_MEASUREMENT_ID);
+    const gaScript = document.createElement("script");
+    gaScript.async = true;
+    gaScript.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA_MEASUREMENT_ID);
+    document.head.appendChild(gaScript);
+  }
+
+  /* Sends generate_lead, then calls done. No-op (done immediately) while
+     the measurement ID is still the placeholder. */
+  function trackGenerateLead(role, done) {
+    if (!gaIsConfigured() || typeof window.gtag !== "function") {
+      done();
+      return;
+    }
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      done();
+    };
+    window.gtag("event", "generate_lead", {
+      role: role,
+      event_callback: finish,
+      event_timeout: 1200,
+    });
+    window.setTimeout(finish, 1500);
+  }
+
+  /* ---------- Attribution ----------
+     UTM params from the landing URL are stored for the tab session so they
+     survive navigation (for example / → /waitlist). The first external
+     referrer is kept the same way. Hidden fields on both forms are filled
+     from that store and posted with the rest of the form. */
+  const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+  const ATTRIBUTION_STORAGE_KEY = "lumora_attribution";
+
+  function readAttribution() {
+    try {
+      const parsed = JSON.parse(sessionStorage.getItem(ATTRIBUTION_STORAGE_KEY) || "{}");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (err) {
+      return {};
+    }
+  }
+
+  function captureAttribution() {
+    const params = new URLSearchParams(window.location.search);
+    const stored = readAttribution();
+
+    UTM_KEYS.forEach((key) => {
+      const value = params.get(key);
+      if (value) stored[key] = value.slice(0, 200);
+    });
+
+    if (!stored.referrer && document.referrer) {
+      try {
+        const refUrl = new URL(document.referrer);
+        if (refUrl.origin !== window.location.origin) {
+          stored.referrer = document.referrer.slice(0, 500);
+        }
+      } catch (err) {
+        stored.referrer = document.referrer.slice(0, 500);
+      }
+    }
+
+    try {
+      sessionStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(stored));
+    } catch (err) {
+      /* Storage can be blocked. The fields still submit, just empty. */
+    }
+
+    UTM_KEYS.concat("referrer").forEach((key) => {
+      const value = stored[key] || "";
+      document.querySelectorAll('input[name="' + key + '"]').forEach((input) => {
+        input.value = value;
+      });
+    });
+  }
+
+  captureAttribution();
+
   /* ---------- Mobile nav ---------- */
   const navToggle = document.getElementById("navToggle");
   const siteNav = document.getElementById("siteNav");
 
-  navToggle.addEventListener("click", () => {
-    const open = siteNav.classList.toggle("is-open");
-    navToggle.setAttribute("aria-expanded", String(open));
-  });
+  if (navToggle && siteNav) {
+    navToggle.addEventListener("click", () => {
+      const open = siteNav.classList.toggle("is-open");
+      navToggle.setAttribute("aria-expanded", String(open));
+    });
 
-  siteNav.addEventListener("click", (e) => {
-    if (e.target.tagName === "A") {
-      siteNav.classList.remove("is-open");
-      navToggle.setAttribute("aria-expanded", "false");
-    }
-  });
+    siteNav.addEventListener("click", (e) => {
+      if (e.target.tagName === "A") {
+        siteNav.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
 
   /* ---------- Footer year ---------- */
-  document.getElementById("year").textContent = new Date().getFullYear();
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ---------- Animated counters ----------
-     The hero stats row (.hero-proof) is hidden in index.html while the counts
-     are still zero. Remove that hidden attribute to show the row; these
-     counters will animate again with no other change here. */
+     The hero stats row (.hero-proof) is hidden in index.html.
+     data-counter values in that row are real totals (currently 0).
+     Remove hidden only after those attributes are set to true counts.
+     These counters will then animate with no other change here. */
   const counters = document.querySelectorAll("[data-counter]");
   const counterObserver = new IntersectionObserver(
     (entries) => {
@@ -183,13 +285,24 @@
 
     // Validate the last step, then let the browser POST natively to the
     // form's action URL, which navigates to the endpoint's confirmation page.
+    // Un-static forwards every named field, including the hidden attribution
+    // inputs. generate_lead fires only after validation passes. While the
+    // GA measurement ID is still the placeholder, that call is a no-op and
+    // the POST is not delayed.
     form.addEventListener("submit", (e) => {
       if (!validateStep(steps[current])) {
         e.preventDefault();
         return;
       }
+      captureAttribution();
       btnSubmit.disabled = true;
       btnSubmit.textContent = "Submitting…";
+      if (!gaIsConfigured()) return;
+
+      e.preventDefault();
+      const roleInput = form.querySelector('input[name="role"]');
+      const role = roleInput ? roleInput.value : "";
+      trackGenerateLead(role, () => form.submit());
     });
 
     render();

@@ -63,11 +63,12 @@
             <a href="/waitlist?tab=doctor" class="btn btn-outline btn-lg">Join as a doctor</a>
           </div>
           <!-- Waitlist stats stay hidden while the counts are still zero.
-               Remove the hidden attribute when the numbers are worth showing. -->
+               data-counter values are the real totals. Set them before removing hidden.
+               Do not put placeholder numbers back. -->
           <div class="hero-proof" hidden>
-            <div class="proof-item"><strong data-counter="1200">0</strong><span>people on the waitlist</span></div>
-            <div class="proof-item"><strong data-counter="85">0</strong><span>doctors pre-registered</span></div>
-            <div class="proof-item"><strong data-counter="12">0</strong><span>countries represented</span></div>
+            <div class="proof-item"><strong data-counter="0">0</strong><span>people on the waitlist</span></div>
+            <div class="proof-item"><strong data-counter="0">0</strong><span>doctors pre-registered</span></div>
+            <div class="proof-item"><strong data-counter="0">0</strong><span>countries represented</span></div>
           </div>
         </div>
         <div class="hero-visual" aria-hidden="true">
@@ -233,6 +234,13 @@
           <div class="form-panel is-active" id="panel-patient" role="tabpanel" aria-labelledby="tab-patient">
             <form id="patientForm" action="https://forms.un-static.com/forms/3f4b99822d9315a71e1da563fddd7c45e65bf776" method="POST" novalidate>
               <input type="hidden" name="role" value="patient" />
+              <!-- Attribution. script.js fills these from the landing URL (kept in sessionStorage). Un-static posts every named field. -->
+              <input type="hidden" name="utm_source" value="" />
+              <input type="hidden" name="utm_medium" value="" />
+              <input type="hidden" name="utm_campaign" value="" />
+              <input type="hidden" name="utm_content" value="" />
+              <input type="hidden" name="utm_term" value="" />
+              <input type="hidden" name="referrer" value="" />
               <!-- Honeypot: leave empty. Set the same field name in Un-static spam settings. -->
               <div class="hp-field" aria-hidden="true">
                 <label for="p-website">Website</label>
@@ -365,6 +373,21 @@
                   <textarea id="p-anything" name="comments" rows="3" placeholder="Tell us about your experience, hopes, or concerns…"></textarea>
                 </div>
                 <div class="field">
+                  <label for="p-hear">How did you hear about us?</label>
+                  <select id="p-hear" name="howDidYouHear">
+                    <option value="">Select…</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="x">X/Twitter</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="friend-or-family">Friend or family</option>
+                    <option value="community">Community/church/mosque group</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="field">
                   <label class="consent">
                     <input type="checkbox" name="consent" required />
                     <span>I agree to be contacted by Lumora Health about early access and product updates. <span class="req">*</span></span>
@@ -386,6 +409,13 @@
           <div class="form-panel" id="panel-doctor" role="tabpanel" aria-labelledby="tab-doctor" hidden>
             <form id="doctorForm" action="https://forms.un-static.com/forms/3f4b99822d9315a71e1da563fddd7c45e65bf776" method="POST" novalidate>
               <input type="hidden" name="role" value="doctor" />
+              <!-- Attribution. script.js fills these from the landing URL (kept in sessionStorage). Un-static posts every named field. -->
+              <input type="hidden" name="utm_source" value="" />
+              <input type="hidden" name="utm_medium" value="" />
+              <input type="hidden" name="utm_campaign" value="" />
+              <input type="hidden" name="utm_content" value="" />
+              <input type="hidden" name="utm_term" value="" />
+              <input type="hidden" name="referrer" value="" />
               <!-- Honeypot: leave empty. Set the same field name in Un-static spam settings. -->
               <div class="hp-field" aria-hidden="true">
                 <label for="d-website">Website</label>
@@ -552,6 +582,21 @@
                 <div class="field">
                   <label for="d-motivation">What excites you about serving diaspora patients?</label>
                   <textarea id="d-motivation" name="motivation" rows="3" placeholder="Optional. Tell us in a sentence or two…"></textarea>
+                </div>
+                <div class="field">
+                  <label for="d-hear">How did you hear about us?</label>
+                  <select id="d-hear" name="howDidYouHear">
+                    <option value="">Select…</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="x">X/Twitter</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="friend-or-family">Friend or family</option>
+                    <option value="community">Community/church/mosque group</option>
+                    <option value="other">Other</option>
+                  </select>
                 </div>
                 <div class="field">
                   <label class="consent">

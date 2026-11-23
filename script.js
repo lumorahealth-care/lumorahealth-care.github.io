@@ -9,10 +9,10 @@
      CONFIG: Google Analytics 4 measurement ID
      Paste the real ID from GA4 Admin → Data streams here.
      This is the only place the ID is set.
-     While it is still the placeholder, gtag.js is not loaded
+     While it is still the placeholder G-XXXXXXXXXX, gtag.js is not loaded
      and no events are sent.
      ============================================================ */
-  const GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+  const GA_MEASUREMENT_ID = "G-9L2BMRRH1Q";
 
   function gaIsConfigured() {
     return /^G-[A-Z0-9]+$/.test(GA_MEASUREMENT_ID) && GA_MEASUREMENT_ID !== "G-XXXXXXXXXX";
